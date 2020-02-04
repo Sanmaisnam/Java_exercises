@@ -1,0 +1,166 @@
+package agefinder;
+import java.util.ArrayList;
+
+public class Calculation {
+	ArrayList<User> users = new ArrayList<>();
+	int months [] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	public int calculation(Today td, Birthdate bd) {
+		
+		if (td.year%4==0 || td.year%4==0 && td.year%400==0 || bd.year%4==0 || bd.year%4==0 && bd.year%400==0) 
+		{
+			months[1] = 29;			//leap February
+		}
+		
+		int my_age_year = td.year - bd.year;
+		/*int my_age_month = td.month - bd.month;
+		int my_age_days = td.date - bd.date;
+
+		//Updating the number of days for the current age
+				if (my_age_days < 0) {
+					if (my_age_month > 0) {	my_age_days+= months[bd.month-1];}
+					else {	my_age_days+= months[bd.month-1] - 1;}
+					my_age_month--;
+				}
+				else if (my_age_days==0 && my_age_month==12) {
+					my_age_year++;
+					my_age_month=0;
+				}
+		
+		//Updating the number of months for the current age
+		if (my_age_month < 0) {
+			my_age_year--;
+			my_age_month += 12;
+			if (my_age_days < 0) {my_age_month--;}
+		}
+		else if (my_age_month==0 && my_age_days < 0){
+			my_age_year--;
+			my_age_month = 11;
+		}*/		
+		
+		//Calculating the total days of the today's date
+		int t_days_in_year = 0;
+  		for (int i = 0; i < td.month-1; i++) {
+  			t_days_in_year += months[i];
+  		}
+  		t_days_in_year += td.countLeapYears(td);		// adding the leap days  		
+  		t_days_in_year += td.year * 365 + td.date;
+  		
+  		//Calculating the total days of the next birthdate
+  		bd.year += my_age_year+1;		//updating the age
+  		int b_days_in_year = 0;
+		for (int i = 0; i < bd.month-1; i++) {
+			b_days_in_year += months[i];
+		}
+		b_days_in_year += bd.countLeapYears(bd);		//adding the leap days
+		b_days_in_year += (bd.year)* 365 + bd.date;
+	
+		int total_days_my_age = b_days_in_year - t_days_in_year;
+		users.add(new User(bd.name, total_days_my_age));
+		return total_days_my_age;
+	}
+	
+	public void sortuserlist() {
+		int size_arraylist=users.size();
+		for (int i = 0; i <size_arraylist-1; i++) {
+			int tmp = i;
+			 for (int j = i +1; j < size_arraylist; j++) {	    	
+		        if (users.get(i).getYear() > users.get(j).getYear()) {
+		        	users.set(tmp, users.get(i));		 
+		        	users.set(i, users.get(j));
+		        	users.set(j,users.get(tmp));
+		        }
+		    }
+		}		
+	}
+
+//custom class arraylist datatype
+public class User {
+	public String name;
+	int year;
+	User(String name, int year) {
+		this.name = name;
+		this.year = year;
+	}
+	/*public int getAge() {
+	    return year;
+	}
+	public String getName() {
+	    return name;
+	}*/
+	
+}
+  
+	
+	/*public void getuserlist() {
+		for (User b:users) {
+			System.out.println(b.getName()+"'s coming birthday in "+b.getYear()+" days");
+	     }
+		}
+		
+		package agefinder;
+import java.util.ArrayList;
+
+public class Calculation {
+	ArrayList<User> users = new ArrayList<>();
+	int months [] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	public int calculation(Today td, Birthdate bd) {
+		
+		if (td.year%4==0 || td.year%4==0 && td.year%400==0 || bd.year%4==0 || bd.year%4==0 && bd.year%400==0) 
+		{
+			months[1] = 29;			//leap February
+		}
+		
+		int my_age_year = td.year - bd.year;
+		
+		//Calculating the total days of the today's date
+		int t_days_in_year = 0;
+  		for (int i = 0; i < td.month-1; i++) {
+  			t_days_in_year += months[i];
+  		}
+  		t_days_in_year += td.countLeapYears(td);		// adding the leap days  		
+  		t_days_in_year += td.year * 365 + td.date;
+  		
+  		//Calculating the total days of the next birthdate
+  		bd.year += my_age_year+1;		//updating the age
+  		int b_days_in_year = 0;
+		for (int i = 0; i < bd.month-1; i++) {
+			b_days_in_year += months[i];
+		}
+		b_days_in_year += bd.countLeapYears(bd);		//adding the leap days
+		b_days_in_year += (bd.year)* 365 + bd.date;
+	
+		int total_days_my_age = b_days_in_year - t_days_in_year;
+		users.add(new User(bd.name, total_days_my_age));
+		return total_days_my_age;
+	}
+	
+	public void sortuserlist( ArrayList<User> users) {
+		int size_arraylist=users.size();
+		for (int i = 0; i <size_arraylist-1; i++) {
+			int tmp = i;
+			 for (int j = i +1; j < size_arraylist; j++) {	    	
+		        if (users.get(tmp).getYear() > users.get(j).getYear()) {
+		        	users.set(tmp, users.get(i));		 
+		        	users.set(i, users.get(j));
+		        	users.set(j,users.get(tmp));
+		        }
+		    }
+		}		
+	}
+	
+	
+	public void getuserlist() {
+		
+		//sortuserlist(users);
+		for (User b:users) {
+			System.out.println(b.getName()+"'s coming birthday in "+b.getYear()+" days");
+	     }
+		}
+}
+
+	
+*
+		*/
+}
+
+	
